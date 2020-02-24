@@ -10,8 +10,6 @@
 
 # @Software: PyCharm
 
-from redis import StrictRedis
-
 """
 redis是用于操作Redis的第三方库,StrictRedis是官方推荐的方法，而且Redis是它的子类，Redis能做到的StrictRedis基本都能做到
 """
