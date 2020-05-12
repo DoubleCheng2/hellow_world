@@ -1,0 +1,105 @@
+import datetime
+import time
+
+
+class Solution(object):
+
+
+
+    def __init__(self):
+        self.init_cycle_day = 30
+        self.year = 2020
+        self.numDict = {1:10,2:100,3:500,4:1000,5:5000,6:10000,7:50000,8:100000}
+        self.increaseDict = {1:0.3,2:0.31,3:0.32,4:0.33,5:0.34,6:0.35,7:0.36,8:0.37}
+        self.numLove = 15
+
+    def getCurrentCycleDay(self,dateTime):
+        # /**
+        # * 获取当前的周期
+        # *
+        # */
+        years = dateTime.year - self.year
+        months = dateTime.month - 1
+        return self.init_cycle_day + (years*12 + months)*2
+
+    def getCurrentPosyValue(self,dateTime,category=0):
+        # /**
+        # * 获取当前的每个铭文的价值
+        # * 每个月缩减收益0.005  也就是 0.5%
+        # */
+        try:
+            init_num = self.numDict[category]
+            increase_num = self.increaseDict[category]
+            num = (self.getCurrentCycleDay(dateTime) - self.init_cycle_day)/2
+            return (increase_num - 0.005*num + 1) * init_num
+
+        except Exception as e:
+            print(e)
+            print("----------获取当前的每个铭文的价值error-------------------------")
+            exit()
+
+    def feedbackFirstRed(self, dateStr):
+        """
+        :type dateStr: str
+        :rtype: date 第一次攒齐8个红色，init_date = datetime.datetime.strptime('2019-12-1', '%Y-%m-%d')
+        """
+        currentIncome = 0
+
+        format_date = datetime.datetime.strptime(dateStr, '%Y-%m-%d')
+
+        dayNum = self.getCurrentCycleDay(format_date)
+
+        init_incomeDay = self.numLove/dayNum
+        incomeDay = init_incomeDay
+        dayNum -= 1
+        currentIncome += incomeDay
+
+        end = {}
+        total = []
+        index = 1
+        while len(end)!=8 :
+            time.sleep(1)
+            format_date = format_date + datetime.timedelta(days=1)
+
+
+            if dayNum == 0:
+                incomeDay -= init_incomeDay
+                total.append(0)
+
+            dayNum -= 1
+
+            if len(end) >0:
+                currentIncome += incomeDay
+                tmp_list = []
+                for key, value in end.items():
+                    if value[0]!= 0:
+                        value[0] -=1
+                    else:
+                        tmp_list.append(key)
+                        incomeDay -= value[1]
+                # print(end)
+                if len(tmp_list)>0:
+                    print(tmp_list)
+                    [total.append(end.pop(x)) for x in tmp_list]
+            else:
+                currentIncome += incomeDay
+
+
+            if currentIncome>=10:
+                num = self.getCurrentPosyValue(format_date, category=1)
+                Cycleday = self.getCurrentCycleDay(format_date)
+                end[index] = {0:Cycleday,1:num/Cycleday}
+                incomeDay += num/Cycleday
+                # 可以代表红色铭文的数量 index
+                index += 1
+                currentIncome -=10
+            print("=============", format_date,'；每日收益：',incomeDay,"；--------当前总数：",currentIncome,"；======当前红色券个数：",len(end),'；-------总券个数：',index,'-----------;过期的券数:',len(total) )
+        return format_date,total
+
+
+
+
+tes = Solution()
+data = tes.feedbackFirstRed('2020-2-19')
+
+print(data)
