@@ -19,7 +19,7 @@ redis是用于操作Redis的第三方库,StrictRedis是官方推荐的方法，�
 #首先连接两个数据库
 from redis import Redis
 B = Redis(host='127.0.0.1', port=6379, db=0)
-A = Redis(host='47.104.175.111', port=6379, db=0, password='0p^C2lGGZdZ*Fy#$dPEI8dxAke*!#pqX4W1JVIpWfrYt7o68qFvQ7rvhq6UUK!iF')
+A = Redis(host='111.1.1.1', port=6379, db=0, password='saaaaaaaaaaa')
 #测试连接是否成功
 print(A,B)
 
